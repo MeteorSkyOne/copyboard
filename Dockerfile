@@ -20,7 +20,7 @@ RUN npm install
 
 COPY server .
 
-RUN mv /web/dist .
+RUN cp -r /web/dist .
 
 EXPOSE 3000
 

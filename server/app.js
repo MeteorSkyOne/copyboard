@@ -1,6 +1,7 @@
 const express = require('express')
 const session = require("express-session")
 const bodyParser = require('body-parser')
+const history = require("connect-history-api-fallback");
 const port = 3000
 var app = express();
 app.use(bodyParser.json());
@@ -17,6 +18,8 @@ app.use(session({
 var data = require('./data/data.js')
 
 app.use('/api/data', data)
+
+app.use(history());
 
 app.use(express.static('./dist'))
 
