@@ -62,6 +62,10 @@ export default {
                         value.heading = 'heading' + index;
                         value.created_time = util.formatDate(value.created_time);
                     });
+                    // sort by time asc
+                    data.sort(function (a, b) {
+                        return a.created_time > b.created_time ? -1 : 1;
+                    });
                     this.copyList = data;
                 })
                 .catch(error => {

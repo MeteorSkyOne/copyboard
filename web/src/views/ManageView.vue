@@ -68,20 +68,20 @@
                         <form class="add-form" method="post" @submit="submit($event)">
                             <div class="mb-3 row">
                                 <label for="staticEmail" class="col-sm-2 col-form-label">ID</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-8">
                                     <input type="text" readonly class="form-control-plaintext" v-model="editModal.id"
                                         required>
                                 </div>
                             </div>
                             <div class="mb-3 row">
                                 <label for="title" class="col-sm-2 col-form-label">标题</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-8">
                                     <input type="text" class="form-control" v-model="editModal.title" required>
                                 </div>
                             </div>
                             <div class="mb-3 row">
                                 <label for="content" class="col-sm-2 col-form-label">内容</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-8">
                                     <textarea class="form-control" id="content" v-model="editModal.content" rows="3"
                                         required></textarea>
                                 </div>
@@ -110,13 +110,13 @@
                         <form class="add-form" method="post" @submit="submit($event)">
                             <div class="mb-3 row">
                                 <label for="title" class="col-sm-3 col-form-label">新密码</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-7">
                                     <input type="password" class="form-control" v-model="chgPwdModal.pwd" required>
                                 </div>
                             </div>
                             <div class="mb-3 row">
                                 <label for="title" class="col-sm-3 col-form-label">确认新密码</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-7">
                                     <input type="password" class="form-control" v-model="chgPwdModal.cfmPwd" required>
                                 </div>
                             </div>
@@ -198,7 +198,6 @@ export default {
         getLoginStatus() {
             axios.get("/data/isLogin")
                 .then(response => {
-                    console.log(response.data);
                     if (response.data.code == 1) {
                         this.isLogin = true;
                         this.cookies.set("isLogin", true);
@@ -229,17 +228,23 @@ export default {
                 });
         },
         getCopyList() {
-            axios.get("/data/copyList")
+            axios.get('/data/copyList')
                 .then(response => {
                     var data = response.data;
                     $.each(data, function (index, value) {
+                        value.collapse = 'collapse' + index;
+                        value.heading = 'heading' + index;
                         value.created_time = util.formatDate(value.created_time);
+                    });
+                    // sort by time asc
+                    data.sort(function (a, b) {
+                        return a.created_time > b.created_time ? -1 : 1;
                     });
                     this.copyList = data;
                 })
                 .catch(error => {
                     console.log(error);
-                });
+                })
         },
         remove(id) {
             axios.post("/data/remove", {
