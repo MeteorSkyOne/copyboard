@@ -26,6 +26,9 @@
                             {{ item.content }}
                         </pre>
                     </div>
+                    <div v-if="item.file_path">
+                        <a :href="'/api/data/download/' + item.file_path">{{ item.filename }}</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,12 +125,16 @@ export default {
     margin: auto auto;
 }
 
-pre { 
-    white-space: pre-line; /* css3.0 */ 
-    white-space:-moz-pre-wrap; /* Firefox */ 
-    white-space:-pre-wrap; /* Opera 4-6 */ 
-    white-space:-o-pre-wrap; /* Opera 7 */ 
-    word-wrap:break-word; /* Internet Explorer 5.5+ */ 
-} 
- 
+pre {
+    white-space: pre-line;
+    /* css3.0 */
+    white-space: -moz-pre-wrap;
+    /* Firefox */
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+    /* Internet Explorer 5.5+ */
+}
 </style>
