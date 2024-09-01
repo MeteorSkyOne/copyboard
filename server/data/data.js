@@ -48,11 +48,17 @@ router.get('/download/:filename', (req, res) => {
         // 发送文件给客户端
         res.download(filePath, decodeURIComponent(originFilename(filename)), (err) => {
             if (err) {
-                return res.status(500).send(util.formatReturn(0, 'Could not download the file'));
+                // 检查响应是否已被发送
+                if (!res.headersSent) {
+                    return res.status(500).send(util.formatReturn(0, 'Could not download the file'));
+                } else {
+                    console.error('Error during file download:', err);
+                }
             }
         });
     });
 });
+
 
 router.get('/fileList', (req, res) => {
     fs.readdir(fileSavePath, (err, files) => {
