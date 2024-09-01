@@ -31,6 +31,14 @@
                     <input type="file" class="form-control" @change="handleFileUpload">
                 </div>
             </div>
+            <div class="mb-3 row" v-if="uploadProgress > 0">
+                <div class="col-sm-9 offset-sm-1">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" :style="{ width: uploadProgress + '%' }"
+                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">{{ uploadProgress }}%</div>
+                    </div>
+                </div>
+            </div>
             <button type="submit" class="btn btn-outline-primary" id="btn-sutmit">提交</button>
         </form>
     </div>
@@ -49,6 +57,7 @@ export default {
             status: 0,
             err_msg: '',
             file: null,  // 用于存储上传的文件
+            uploadProgress: 0, // 用于存储上传进度
         };
     },
     methods: {
@@ -76,6 +85,9 @@ export default {
             axios.post('/data/add', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
+                },
+                onUploadProgress: progressEvent => {
+                    this.uploadProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                 }
             })
                 .then(response => {
@@ -85,6 +97,10 @@ export default {
                     this.status = 2;
                     this.err_msg = error.response.data.err_msg;
                 })
+                .finally(() => {
+                    // 重置上传进度条
+                    this.uploadProgress = 0;
+                });
         }
     }
 }
@@ -111,5 +127,14 @@ export default {
 
 #btn-sutmit {
     margin-right: 10%;
+}
+
+.progress {
+    height: 20px;
+}
+
+.progress-bar {
+    background-color: #007bff;
+    transition: width 0.4s ease;
 }
 </style>
